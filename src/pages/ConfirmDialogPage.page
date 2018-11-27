@@ -1,0 +1,7 @@
+<apex:page controller="ConfirmDialodController">
+    <apex:form >
+        <apex:commandLink action="{!display}" onClick="if (!confirmDelete('Are you sure to delete test?')) return false;" value="Del">
+            <apex:param name="indexNo" value="123"/>
+        </apex:commandLink>
+    </apex:form>
+</apex:page>

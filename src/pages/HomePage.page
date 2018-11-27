@@ -1,0 +1,4 @@
+<apex:page >
+    <c:AccountNotificationComp theAccID="00128000005g9mN"/>
+    
+</apex:page>

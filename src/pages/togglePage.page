@@ -1,0 +1,22 @@
+<apex:page >
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+ 
+   
+    
+    <div class="details">
+       General Observation
+   </div>
+   <div class="block-details">
+    Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
+   </div>
+    <button>Toggle 'em</button>
+<p>Hiya</p>
+<p>Such interesting text, eh?</p>
+ 
+<script>
+$(".details" ).click(function() {
+  $( ".block-details" ).toggle( "slow" );
+});
+</script>           
+
+</apex:page>

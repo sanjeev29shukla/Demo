@@ -1,0 +1,31 @@
+<apex:page controller="RemotectionController">
+    <script>
+    var a;
+        function autoCall() {
+            RemotectionController.getRecords('test',function(result, event){
+                if(event.type == 'exception') {
+                    alert(event.message);
+                } else {
+                    a = result;
+                    console.log(result);
+                    console.log(a);
+                }
+            });
+        }
+        function autoCall2(){
+            RemotectionController.getAccount(a,function(result, event){
+                if(event.type == 'exception') {
+                    alert(event.message);
+                } else {
+                    alert(result);
+                }
+            });
+        }
+        
+    </script>
+    <apex:form >
+        
+        <apex:commandLink value="Click1" onclick="autoCall()"/>
+        <apex:commandLink value="Click2" onclick="autoCall2()"/>
+    </apex:form>
+</apex:page>

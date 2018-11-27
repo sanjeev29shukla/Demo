@@ -1,0 +1,52 @@
+<apex:page controller="popUpController">
+    <apex:includeScript value="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" />
+    
+<script type="text/javascript">
+     var __sfdcSessionId = '{!GETSESSIONID()}';
+</script> 
+<script src="/soap/ajax/28.0/connection.js" type="text/javascript"></script>
+<script src="/soap/ajax/28.0/apex.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    function doQuery()
+    {
+       var usrName = 'san%'; 
+        sforce.connection.query
+        (
+            "select Username from User WHERE Username LIKE 'san%' ",
+            {
+                onSuccess: onSuccess,
+                onFailure: onFailure,
+                source: { //state that you need when the callback is called 
+                }
+            }
+        );
+    }
+
+    function onSuccess(result, source) 
+    {
+        var records = result.getArray("records");
+        $("#theIn").autocomplete({
+                source : records 
+        });
+        
+    }    
+
+    function onFailure(error, source) 
+    {
+        //alert(error);
+    }
+    //doQuery();
+     
+</script>
+    <apex:form >
+        
+        <apex:pageBlock >
+            <apex:pageBlockSection >
+                <apex:inputText value="{!userNa}" id="theIn" onkeypress="doQuery();"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        
+        
+    </apex:form>
+</apex:page>

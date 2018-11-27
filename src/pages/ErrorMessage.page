@@ -1,0 +1,9 @@
+<apex:page controller="TestMessageController">
+    <apex:form >
+        <apex:outputLabel value="Test String" />
+        <apex:inputField value="{!test.Name}" id="test">
+        <div class="errorMsg"><strong>Error:</strong>&nbsp;{!error }</div>
+        </apex:inputField>
+        <!--<br/><apex:message for="test"/>-->
+    </apex:form>
+</apex:page>

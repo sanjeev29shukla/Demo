@@ -1,0 +1,91 @@
+<apex:page standardController="Account">
+    <META HTTP-EQUIV="refresh" CONTENT="5"/>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsqFZkV-KOQapdEGcaB2dXVuEGDNEhAnY">
+    </script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js">
+    </script> 
+    <script type="text/javascript"> 
+    
+    $(document).ready(function() {
+        $('#map').height($(window).height() - 50)
+        var myOptions = {
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControl: false
+        }
+        
+        var map;
+        var marker;
+        
+        var infowindowtext = "<b>Sanjeev Shukla</b><br>HSR Layout Sector 6<br>Bengalure, 560068";
+        infowindowtext = infowindowtext.replace(/(\r\n|\n|\r)/gm,"");             
+        var infowindow = new google.maps.InfoWindow({
+            content: infowindowtext
+        });
+        
+        var lt = 0;
+        var lg = 0;
+        if (navigator.geolocation) {
+            //alert('we are golden');
+            navigator.geolocation.getCurrentPosition(function(position){
+                //alert('alert 0');
+                lt = position.coords.latitude;
+                lg = position.coords.longitude;
+                //alert('alert 1: ' + lat + ', ' + long);
+                //initMap(lat, long);
+                
+                map = new google.maps.Map(document.getElementById("map"), myOptions);
+                    
+                    console.log('map '+map);
+                    latLong= {lat: lt, lng: lg};
+                    //center map
+                    map.setCenter(latLong);
+                    
+                    //create marker
+                    marker = new google.maps.Marker({
+                        position: latLong,
+                        map: map,
+                        title: "Sanjeev"
+                    });
+                    
+                    //add listeners
+                    google.maps.event.addListener(marker, 'click', function() {
+                        infowindow.open(map,marker);
+                    });
+                    google.maps.event.addListener(infowindow, 'closeclick', function() {
+                        map.setCenter(marker.getPosition()); 
+                    });
+            }, function(error) { alert('ERROR(' + error.code + '): ' + error.message); });
+        }else{
+            //alert('geolocation is unsupported?');
+            $('#map').css({'height' : '15px'});
+            $('#map').html("Oops! Sanjeev Shukla's billing address could not be found, please make sure the address is correct.");
+            resizeIframe();
+        }
+        
+        function resizeIframe() {
+            var me = window.name;
+            if (me) {
+                var iframes = parent.document.getElementsByName(me);
+                if (iframes && iframes.length == 1) {
+                    height = document.body.offsetHeight;
+                    iframes[0].style.height = height + "px";
+                }
+            }
+        }
+        
+    });
+    </script>
+    
+    <style>
+        #map {
+        font-family: Arial;
+        font-size:12px;
+        //line-height:normal !important;
+        //height:500px !important;
+        background:transparent;
+        }
+    </style>   
+    <div id="map"></div> 
+    
+</apex:page>

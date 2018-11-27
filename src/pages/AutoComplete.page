@@ -1,0 +1,107 @@
+<apex:page controller="AutoCompleteController">
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+<apex:includeScript value="{!URLFOR($Resource.select2, 'select2-3.4.2/select2.js')}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.select2, 'select2-3.4.2/select2.css')}"/>
+<script>
+        var v2{!randomJsIden}
+       
+        var prevVal{!randomJsIden};
+        function autocompleteV2{!randomJsIden}(){
+             var v2=this;
+             jQuery(function($){ //on document.ready
+                    v2.init($)
+             });
+        }
+        
+        autocompleteV2{!randomJsIden}.prototype={
+            init : function($){
+          
+                       var $elem = $( ".auto{!randomJsIden}" ).select2({
+                           minimumInputLength: 1,
+                           placeholder: "No value selected",
+                           allowClear : {!allowClear},
+                           query: function (query) {
+                               queryData{!randomJsIden}(query);
+                               
+                           },
+                           createSearchChoice:function(term, data) {
+                                if({!syncManualEntry} == true){
+                                    return {id:term, text:term};
+                                }
+                            }
+                       });
+                       
+                       $elem.on("select2-selecting", function(e) {
+                         
+                           $('.hiddenField{!randomJsIden}').val(e.val);
+                       });
+                       
+                       $elem.on("select2-removed", function(e) {
+                           $('.hiddenField{!randomJsIden}').val('');
+                       });
+                       
+                      
+                       
+                       if('{!cacheField}' !=''){
+                           $elem.select2("data", {text: "{!cacheField}"})  
+                       }  
+                      
+                    },
+                    
+            triggerSearch :function(val){
+                                
+                                if(prevVal{!randomJsIden} != val){
+                                    $=jQuery;
+                                    prevVal{!randomJsIden} = val;
+                                    var select = $('input.auto{!randomJsIden}');          
+                                    var search = $('.select2-input')
+                                    select.select2('open');
+                                    search.val(val);
+                                    
+                                    search.trigger("input");
+                                }
+                            }
+        }
+        
+        
+        
+        
+        
+         /*
+        *This method queries data according to the passed parameter
+        *and populates the combobox accordingly
+        ***/    
+        function queryData{!randomJsIden}(query){
+          
+           Visualforce.remoting.Manager.invokeAction(
+                     '{!$RemoteAction.AutoCompleteController.getData}',query.term,
+                     function(result, event){
+                          
+                         //if success
+                         if(event.status){ 
+                             var data = {results: []}
+                             data.results = result;                            
+                             query.callback( data);                           
+                         }
+                         else{
+                              alert('Invalid Field/Object API Name : '+event.message);
+                         }
+                        
+                     }, 
+                      {escape: true}
+                );
+            }  
+              
+           
+    </script>
+    <apex:form >
+        <apex:inputText styleClass="auto{!randomJsIden}" value="{!cacheField}" />
+ 
+    <apex:outputPanel id="hiddenPanel">
+        <apex:inputText value="{!us.UserName}" id="hiddenField"
+            styleClass="hiddenField{!randomJsIden}" style="display:none"/>
+    </apex:outputPanel>
+    <script>v2{!randomJsIden} = new autocompleteV2{!randomJsIden}({});</script>
+    </apex:form>
+    
+</apex:page>

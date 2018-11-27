@@ -1,0 +1,35 @@
+<apex:page controller="DynamicRowController">
+    <apex:form >
+        <apex:pageBlock >
+                <apex:variable value="{!1}" var="rowNum"/>
+                <table>
+                <apex:repeat value="{!listWrapper}" var="tpl"> 
+                    <tr>
+                        <td>
+                        <apex:commandLink action="{!deleteRow}" value="Delete">
+                            <apex:param name="index" value="{!FLOOR(rowNum)}"/>
+                        </apex:commandLink>
+                        </td>
+                        <td>
+                        <apex:outputText value="{!FLOOR(rowNum)}" />
+                        </td>
+                        <td>
+                         <!--<apex:outputText value="{!tpl.name}" rendered="{!!tpl.IsEditUOMSPec}"/>-->
+                         <apex:inputText value="{!tpl.name}"/>
+                         </td>
+                        <td>
+                         <!--<apex:outputText value="{!tpl.Specification}" rendered="{!!tpl.IsEditUOMSPec}"/>-->
+                         <apex:inputText value="{!tpl.add}"/>
+                         </td>
+                     <apex:variable var="rowNum" value="{!rowNum + 1}"/>
+                     </tr>
+                </apex:repeat>
+                </table>
+                <apex:commandButton action="{!addRow}" value="Add Row"/>
+                <apex:commandButton action="{!save}" value="Save"/>
+            
+        </apex:pageBlock>
+    </apex:form>
+
+  
+</apex:page>

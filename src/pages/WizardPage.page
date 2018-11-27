@@ -1,0 +1,83 @@
+<apex:page controller="WizardController" id="thePage">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <apex:form id="theForm">
+        <apex:pageBlock id="theBlock" title="New Contact">
+            <apex:pageBlockSection id="theSec1" columns="2" title="Personal Information">
+                <apex:inputField value="{!con.firstName}" />
+                <apex:inputField value="{!con.lastName}"/>
+                <apex:inputField value="{!con.Birthdate}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Present Address" columns="2" id="theSec2" >
+                <apex:inputField value="{!con.MailingStreet}"/>
+                <apex:inputField value="{!con.MailingCity}"/>
+                <apex:inputField value="{!con.MailingState}"/>
+                <apex:inputField value="{!con.MailingCountry}"/>
+                <apex:inputField value="{!con.MailingPostalCode}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Other Info" columns="2" id="theSec3">
+                <apex:inputField value="{!con.MobilePhone}"/>
+                <apex:inputField value="{!con.HomePhone}"/>
+                <apex:inputField value="{!con.Email}"/>
+            </apex:pageblockSection>
+            <apex:pageBlockSection title="Preview All Information" id="theSec4">
+                <apex:outputField value="{!con.firstName}"/>
+                <apex:outputField value="{!con.lastName}"/>
+                <apex:outputField value="{!con.Birthdate}"/>
+                <apex:outputField value="{!con.MailingStreet}"/>
+                <apex:outputField value="{!con.MailingCity}"/>
+                <apex:outputField value="{!con.MailingState}"/>
+                <apex:outputField value="{!con.MailingPostalCode}"/>
+                <apex:outputField value="{!con.MailingCountry}"/>
+                <apex:outputField value="{!con.MobilePhone}"/>
+                <apex:outputField value="{!con.HomePhone}"/>
+                <apex:outputField value="{!con.Email}"/>
+            </apex:pageBlockSection>
+            <center id="theCenter">
+                <div style=" width : 100%">Please Click on Save Button for submit your form</div>
+                <apex:commandButton value="Save" action="{!save}"/>
+            </center>
+            <button onclick="previous()" id="pre">Previous</button>
+            <button onclick="next(); return false;" id="next">Next</button>
+        </apex:pageBlock>
+    </apex:form>
+    <script>
+        $(document).ready(function(){
+            var sec1 = true;
+            var sec2 = false;
+            var sec3 = false;
+            var sec4 = false;
+            $("[id$=theSec2]").hide();
+            $("[id$=theSec3]").hide();
+            $("[id$=theSec4]").hide();
+            $("[id$=theCenter]").hide();
+            $("[id$=pre]").hide();
+        });
+        document.getElementById("pre").addEventListener("click", previous);
+        document.getElementById("next").addEventListener("click", next);
+        function next(){
+            if(sec1 == true){
+                sec1 = false;
+                sec2 = true;
+                $("[id$=theSec1]").hide();
+                $("[id$=theSec2]").show();
+                $("[id$=pre]").show();
+            }else if(sec2 == true){
+                sec2 = false;
+                sec3 = true;
+                $("[id$=theSec2]").hide();
+                $("[id$=theSec3]").show();
+            }else if(sec3 == true){
+                sec3 = false;
+                sec4 = true;
+                $("[id$=theSec3]").hide();
+                $("[id$=theSec4]").show();
+                $("[id$=theCenter]").show();
+                $("[id$=next]").hide();
+            }
+        }
+        function previous(){
+        
+        }
+    </script>
+</apex:page>

@@ -1,0 +1,79 @@
+<apex:page controller="ProgressBarController">
+    <head>
+        <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"/>
+        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <link rel="stylesheet" href="/resources/demos/style.css"/>-->
+        
+        <apex:includeScript value="{!UrlFor($Resource.jQuery)}"/>
+        <apex:includeScript value="{!UrlFor($Resource.jQuery181,'/jquery/jquery-ui.js')}"/>
+        <apex:stylesheet value="{!UrlFor($Resource.jQuery181,'/jquery/jquery-ui.css')}"/>
+        <style>
+            .ui-progressbar {
+                position: relative;
+            }
+            .progress-label {
+                position: absolute;
+                left: 50%;
+                top: 4px;
+                font-weight: bold;
+                text-shadow: 1px 1px 0 #fff;
+            }
+            .btnClass{
+                width:90px !important;
+                height:30px !important;
+                font-size:12px !important;
+                background: #e8e8e9 !important;
+            }
+        </style>
+    </head>
+    <body>
+       
+        
+        <apex:form id="theForm">
+            <apex:actionFunction name="importFile" action="{!importCSVFile}"/>
+            <apex:pagemessages id="thePageMsg"/>
+    
+                <apex:pageBlock title="Import Users">
+                    <apex:pageBlockSection columns="4"> 
+                        <apex:inputFile value="{!csvFileBody}"  filename="{!csvAsString}"/>
+                        <!--<apex:commandButton value="Import File" onclick="progressBar();" />-->
+                        <button type="button" class="btnClass" onclick="progressBar();">Import File</button>
+                    </apex:pageBlockSection>
+                    <div id="progressbar"><div class="progress-label"></div></div>
+                </apex:pageBlock>
+        </apex:form>
+        
+    </body>   
+    <script>
+        
+        function progressBar(){
+             var progressbar = $( "#progressbar" ),
+            progressLabel = $( ".progress-label" );
+        
+            progressbar.progressbar({
+                value: false,
+                change: function() {
+                    progressLabel.text( progressbar.progressbar( "value" ) + "%" );
+                },
+                complete: function() {
+                    progressLabel.text( "100%" );
+                    //importFile();
+                }
+            });
+            
+            function progress() {
+                var val = progressbar.progressbar( "value" ) || 0;
+                
+                progressbar.progressbar( "value", val + 2 );
+                
+                if ( val < 99 ) {
+                    setTimeout( progress, 80 );
+                }
+            }
+        
+            setTimeout( progress, 2000 );
+        }
+    </script>
+
+</apex:page>

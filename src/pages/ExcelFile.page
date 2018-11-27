@@ -1,0 +1,28 @@
+<apex:page controller="acc_summary_Controller" showHeader="false" sidebar="false" applyBodyTag="false" applyHtmlTag="false" standardStylesheets="false" >
+    
+    <!--contentType="application/msword#Test.doc" Page <span class="pagenumber"/> of <span class="pagecount"/>-->
+    
+    <table width="100%" border="1px">
+        <tr>
+            <th>Account Name</th>
+            <th>Phone No.</th>
+            <th>Type</th>
+        </tr>
+        <!--contentType="application/vnd.ms-excel#SalesForceExport.xls"-->
+        <apex:repeat value="{!accType}" var="typ">
+            <tr>
+                <td colSpan="3" class="green-color">
+                    <center><b>{!typ}</b></center>
+                    <apex:repeat value="{!accSum[typ]}" var="acc">
+                        <tr>
+                            <td>{!acc.Name}</td>
+                            <td>{!acc.phone}</td>
+                            <td>{!acc.type}</td>
+                        </tr> 
+                    </apex:repeat>
+                </td>
+            </tr>       
+        </apex:repeat> 
+    </table>
+    
+</apex:page>

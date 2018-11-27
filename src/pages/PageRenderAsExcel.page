@@ -1,0 +1,132 @@
+<apex:page controller="acc_summary_Controller"  renderAs="pdf" cache="false" showHeader="false" sidebar="false" applyBodyTag="false" applyHtmlTag="false" standardStylesheets="false" >
+    
+    <head>
+        <style type="text/css" media="print">
+            @page {
+            margin-bottom: 5cm;
+            @top-center {
+            content: element(header);
+            }
+            @bottom-center {
+            content: element(footer);
+            }
+            }
+            
+            div.footer {
+            height:35px;
+            display: block;
+            margin-bottom:3px;
+            position: running(footer);
+            }
+            
+            
+        </style>
+    </head>
+    <div class="footer">
+        <div>
+            <hr/>
+            <p>The finish method is called after all batches are processed. Use this method to send confirmation emails or execute post-processing</p>
+            <p>The finish method is called execute post-processing</p>
+        </div>
+    </div>
+    <div class="footer">
+        <div>
+            <p>The finish method is called execute post-processing</p>
+        </div>
+    </div>
+    <!--contentType="application/msword#Test.doc" Page <span class="pagenumber"/> of <span class="pagecount"/>-->
+    
+    <table width="100%" border="1px">
+        <tr>
+            <th>Account Name</th>
+            <th>Phone No.</th>
+            <th>Type</th>
+        </tr>
+        <!--contentType="application/vnd.ms-excel#SalesForceExport.xls"-->
+        <apex:repeat value="{!accType}" var="typ">
+            <tr>
+                <td colSpan="3" class="green-color">
+                    <center><b>{!typ}</b></center>
+                    <apex:repeat value="{!accSum[typ]}" var="acc">
+                        <tr>
+                            <td>{!acc.Name}</td>
+                            <td>{!acc.phone}</td>
+                            <td>{!acc.type}</td>
+                        </tr> 
+                    </apex:repeat>
+                </td>
+            </tr>       
+        </apex:repeat> 
+    </table>
+    <p>
+        Please see the detailed explanation.
+        
+        Batch Apex in Salesforce
+        To use batch Apex, you must write an Apex class that implements the Salesforce-provided interface Database.Batchable, and then invoke the class programmatically.
+        
+        Start method
+        
+        
+        The start method is called at the beginning of a batch Apex job. Use the start method to collect the records or objects to be passed to the interface method execute.
+        
+        Syntax: global (Database.QueryLocator ) start(Database.BatchableContext bc) {}
+        
+        This method returns either a Database.QueryLocator object or an iterable that contains the records or objects being passed into the job.
+        
+        Execute Method
+        
+        The execute method is called for each batch of records passed to the method. Use this method to do all required processing for each chunk of data.
+        
+        Syntax: global void execute(Database.BatchableContext BC,){}
+        
+        This method takes the following:
+        o    A reference to the Database.BatchableContext object.
+        o    A list of sObjects, such as , or a list of parameterized types. If you are using a Database.QueryLocator, the returned list should be used.
+        Batches of records execute in the order they are received from the start method.
+        
+        Finish Method
+        
+        Syntax: global void finish(Database.BatchableContext BC){}
+        
+        The finish method is called after all batches are processed. Use this method to send confirmation emails or execute post-processing operations.
+        Each execution of a batch Apex job is considered a discrete transaction. For example, a batch Apex job that contains 1,000 records and is executed without the optional scope parameter from Database.executeBatch is considered five transactions of 200 records each.
+        The Apex governor limits are reset for each transaction. If the first transaction succeeds but the second fails, the database updates made in the first transaction are not rolled back.
+        
+        Example of Batch Apex Class: 
+        Please see the detailed explanation. Batch Apex in Salesforce To use batch Apex, you must write an Apex
+        class that implements the Salesforce-provided interface Database.Batchable, and then invoke the class
+        programmatically. Start method The start method is called at the beginning of a batch Apex job. Use the start
+        method to collect the records or objects to be passed to the interface method execute. Syntax: global
+        (Database.QueryLocator ) start(Database.BatchableContext bc) {} This method returns either a
+        Database.QueryLocator object or an iterable that contains the records or objects being passed into the job.
+        Execute Method The execute method is called for each batch of records passed to the method. Use this
+        method to do all required processing for each chunk of data. Syntax: global void
+        execute(Database.BatchableContext BC,){} This method takes the following: o A reference to the
+        Database.BatchableContext object. o A list of sObjects, such as , or a list of parameterized types. If you are
+        using a Database.QueryLocator, the returned list should be used. Batches of records execute in the order they
+        are received from the start method. Finish Method Syntax: global void finish(Database.BatchableContext
+        BC){} The finish method is called after all batches are processed. Use this method to send confirmation
+        emails or execute post-processing operations. Each execution of a batch Apex job is considered a discrete
+        transaction. For example, a batch Apex job that contains 1,000 records and is executed without the optional
+        scope parameter from Database.executeBatch is considered five transactions of 200 records each. The Apex
+        governor limits are reset for each transaction. If the first transaction succeeds but the second fails, the
+        database updates made in the first transaction are not rolled back. Example of Batch Apex Class:Please see the detailed explanation. Batch Apex in Salesforce To use batch Apex, you must write an Apex
+        class that implements the Salesforce-provided interface Database.Batchable, and then invoke the class
+        programmatically. Start method The start method is called at the beginning of a batch Apex job. Use the start
+        method to collect the records or objects to be passed to the interface method execute. Syntax: global
+        (Database.QueryLocator ) start(Database.BatchableContext bc) {} This method returns either a
+        Database.QueryLocator object or an iterable that contains the records or objects being passed into the job.
+        Execute Method The execute method is called for each batch of records passed to the method. Use this
+        method to do all required processing for each chunk of data. Syntax: global void
+        execute(Database.BatchableContext BC,){} This method takes the following: o A reference to the
+        Database.BatchableContext object. o A list of sObjects, such as , or a list of parameterized types. If you are
+        using a Database.QueryLocator, the returned list should be used. Batches of records execute in the order they
+        are received from the start method. Finish Method Syntax: global void finish(Database.BatchableContext
+        BC){} The finish method is called after all batches are processed. Use this method to send confirmation
+        emails or execute post-processing operations. Each execution of a batch Apex job is considered a discrete
+        transaction. For example, a batch Apex job that contains 1,000 records and is executed without the optional
+        scope parameter from Database.executeBatch is considered five transactions of 200 records each. The Apex
+        governor limits are reset for each transaction. If the first transaction succeeds but the second fails, the
+        database updates made in the first transaction are not rolled back. Example of Batch Apex Class:
+    </p>
+</apex:page>

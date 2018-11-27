@@ -1,0 +1,164 @@
+<apex:page controller="ImportCSVFileControllerNaveen">
+    <head>
+        <apex:includeScript value="{!UrlFor($Resource.jQuery)}"/>
+        <apex:includeScript value="{!UrlFor($Resource.jQuery181,'/jquery/jquery-ui.js')}"/>
+        <apex:stylesheet value="{!UrlFor($Resource.jQuery181,'/jquery/jquery-ui.css')}"/>
+    </head>
+    
+    <!--<apex:includeScript value="{!UrlFor($Resource.jQuery181,'/jquery/jquery-1.8.js')}"/>-->
+    
+    
+    <style type="text/css">
+        .ui-autocomplete-loading { 
+            background: white url("{!$Resource.ajaxLoad}") right center no-repeat; 
+        }
+        .autocomplete{
+            border-color: #929292 #D5D5D5 #D5D5D5 #929292 !important;
+            border-style: solid;border-width: 1px !important;
+            height: 18px !important;
+            padding: 3px 10px;width: 534px !important;
+        }
+        .searchBtn{
+            background: #FDCE3E !important;
+            border: 1px solid #E5A716 !important;
+            color: #434343 !important;
+            height: 26px !important;
+            margin-left: 7px !important;
+            padding: 0 23px !important;
+            font-size: 15px !important; 
+            font-weight: bold !important;
+        }
+    </style>
+    <style>
+        .overlay {
+            display: none;
+            height: 100%;
+            left: 0;
+            position: fixed;
+            top: 0;
+            opacity: 0.3;
+            -moz-opacity: 0.3;
+            width: 100%;
+            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+            filter: alpha(opacity=30);
+            background: #000;
+            -khtml-opacity: 0.3;
+            z-index: 1000;
+        }
+        .loader {
+            background: url('http://i.perezhilton.com/images/loading32.gif') scroll no-repeat 0 0;
+            width: 32px;
+            height: 32px;
+            position: absolute;
+            left: 50%;
+        }
+    </style>
+ 
+    <div id="load_scrl" class="loadingBox loader" style="display:none"> </div>
+    <div class="loadingBox overlay"> </div>
+    <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
+         
+        <script type="text/javascript">
+            //To remove conflictions of jquery
+            var j$ = jQuery.noConflict();            
+            j$(document).ready(function() {
+                //Auto complete textbox component
+                
+            });  
+            
+            function autoCall(selectedText) {
+                //Auto complete textbox component
+                var autoCompleteTextBoxId = "input[class$='autocomplete_textbox']";
+                var queryTerm;
+                //auto complete method
+                j$(selectedText).autocomplete({
+                    minLength: 2,
+                    source: function(request, response) {
+                                queryTerm = request.term;
+                                var sObjects;
+                                var searchText = j$(selectedText).val();
+                                ImportCSVFileController.getRecords(searchText,function(result, event){
+                                    if(event.type == 'exception') {
+                                          alert(event.message);
+                                    } else {
+                                         sObjects = result;
+                                         response(sObjects);
+                                    }
+                                });
+                           },
+                    focus: function( event, ui ) {
+                            j$(selectedText).val( ui.item.Username );
+                            return false;
+                            },
+                    select: function( event, ui ) {
+                                j$(selectedText).val( ui.item.Username );                             
+                                j$(selectedText.offsetParent.previousElementSibling.previousElementSibling.firstElementChild).val(ui.item.Phone);
+                                return false;
+                            },
+                 })
+                 .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+                    var entry = "<a>" + item.Username ;
+                    j$.each("".split(",") , function(key, value) {
+                        entry = entry;
+                    });
+                    entry = entry + "</a>";
+                    entry = entry.replace(queryTerm, "<b>" + queryTerm + "</b>");
+                    return j$( "<li></li>" )
+                        .data( "ui-autocomplete-item", item )
+                        .append( entry )
+                        .appendTo( ul );
+                };
+            }          
+        </script>
+    <script type="text/javascript">
+        function startLoading(){
+            j$('#load_scrl').css('top', j$(document).scrollTop() + 200);
+            j$('.loadingBox').show();
+        }
+        function endLoading(){
+             j$('.loadingBox').hide();
+        }
+    </script>
+    <apex:form id="theForm">
+        <apex:pagemessages id="thePageMsg"/>
+        <apex:pageBlock rendered="{!IF(listWrapperUser.size > 0,false,true)}">
+            <apex:pageBlockSection columns="4"> 
+                <apex:inputFile value="{!csvFileBody}"  filename="{!csvAsString}"/>
+                <apex:commandButton value="Import File" action="{!importCSVFile}"  onclick="startLoading();" />
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        <apex:pageBlock id="pageBlockTableId" rendered="{!IF(listWrapperUser.size > 0,true,false)}">
+            <apex:outputPanel id="thePBOP">
+                <apex:variable var="rowNum" value="{!0}"/>
+                <apex:pageblocktable value="{!listWrapperUser}" var="wrapperUser"  >
+                    <apex:column headerValue="Action">
+                        <apex:commandLink value="Edit" action="{!edit}" rendered="{!!wrapperUser.isEdit}"  >
+                            <apex:param value="{!rowNum}" name="rowToEdit"/>
+                        </apex:commandLink>
+                        <apex:commandLink value="Save" action="{!saveUser}" rendered="{!wrapperUser.isEdit}"  reRender="thePageMsg,thePBOP" >
+                            <apex:param value="{!rowNum}" name="rowToEdit" />
+                        </apex:commandLink>
+                        <apex:variable var="rowNum" value="{!rowNum + 1}"/>
+                    </apex:column>
+                    <apex:column headerValue="Phone Number">
+                        <apex:outputText value="{!wrapperUser.userObj.Phone_Number__c}" rendered="{!!wrapperUser.isEdit}"/>
+                        <apex:inputText value="{!wrapperUser.userObj.Phone_Number__c}" rendered="{!wrapperUser.isEdit}"/>
+                    </apex:column>
+                    <apex:column headerValue="Auth Token">
+                        <apex:outputText value="{!wrapperUser.userObj.AuthToken__c}" rendered="{!!wrapperUser.isEdit}"/>
+                        <apex:inputText value="{!wrapperUser.userObj.AuthToken__c}" rendered="{!wrapperUser.isEdit}"/>
+                    </apex:column>
+                    <apex:column headerValue="User Name">
+                        <apex:outputText value="{!wrapperUser.userObj.User__c}" rendered="{!!wrapperUser.isEdit}"/>
+                        <apex:inputText value="{!wrapperUser.userObj.User__c}" rendered="{!wrapperUser.isEdit}" styleClass="autocomplete_textbox_{!rowNum}" onkeypress="autoCall(this)"/>
+                    </apex:column>
+                    <apex:column headerValue="Status">
+                        <apex:outputText value="{!wrapperUser.userObj.Status__c}" rendered="{!!wrapperUser.isEdit}"/>
+                        <apex:inputText value="{!wrapperUser.userObj.Status__c}" rendered="{!wrapperUser.isEdit}"/>
+                    </apex:column>
+                </apex:pageblocktable>
+            </apex:outputPanel>
+        </apex:pageBlock>
+        
+    </apex:form>
+</apex:page>

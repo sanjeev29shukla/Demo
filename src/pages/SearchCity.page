@@ -1,0 +1,20 @@
+<apex:page controller="SearchCityController">
+    <apex:form >
+        <apex:pageBlock title="Google Map" >
+            <apex:pageMessages />
+            <apex:pageBlockSection columns="2" title="Find Your City" rendered="{!flag}">
+                <apex:inputField value="{!city.Name}"/>
+                <apex:commandButton action="{!searchCity}" value="Search"/>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection columns="2" title="Find Your City">
+                <apex:outputField value="{!city.Name}"/>
+                <apex:outputField value="{!city.Address__c}"/>
+                <apex:commandButton action="{!saveCity}" value="Save Address" rendered="{!flag}"/>
+                <apex:commandButton action="{!reset}" value="New Address" rendered="{!!flag}"/>
+            </apex:pageBlockSection>
+            
+  </apex:pageBlock>
+    </apex:form>
+  
+</apex:page>

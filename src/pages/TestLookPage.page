@@ -1,0 +1,18 @@
+<apex:page controller="TestLookUp" id="thePage">
+    <apex:form id="theForm">
+        <apex:pageBlock id="theBlock">
+            <apex:pageBlockSection >
+                <apex:inputField value="{!con.lastName}"/>
+            </apex:pageBlockSection>
+            <apex:actionRegion >
+                <apex:pageBlockSection id="theSec1" >
+                    <apex:inputField value="{!newRw.Who__c}" onchange="change();">
+                        <apex:actionFunction name="change" reRender="theSec1"/>
+                    </apex:inputField>
+                    <apex:inputField value="{!newRw.Contact__c}" rendered="{!newRw.Who__c == 'Contact'}" id="theCon"/>
+                    <apex:inputField value="{!newRw.Lead__c}" rendered="{!newRw.Who__c == 'Lead'}" id="theLead"/>
+                </apex:pageBlockSection>
+            </apex:actionRegion>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

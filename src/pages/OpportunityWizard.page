@@ -1,0 +1,62 @@
+<apex:page controller="OpportunityWizardController">
+    <apex:form >
+        <apex:pageBlock title="Opportunity Wizard" rendered="{!isAccount || isOpportunity}">
+            <apex:pageBlockButtons rendered="{!isAccount || isOpportunity}">                   
+                <apex:commandButton value="Next" action="{!next}" />
+            </apex:pageBlockButtons>  
+            <apex:pageBlockSection title="Account Details" columns="2" rendered="{!isAccount}" >            
+                <apex:inputField value="{!theAcc.name}" /> 
+                <apex:inputField value="{!theAcc.site}"/> 
+                <apex:inputField value="{!theAcc.type}"/> 
+                <apex:inputField value="{!theAcc.accountNumber}"/>              
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Contact Details" columns="2" rendered="{!isAccount}" >
+                <apex:inputField value="{!theCon.FirstName}"/>
+                <apex:inputField value="{!theCon.LastName}"/>
+                <apex:inputField value="{!theCon.Email}"/>
+                <apex:inputField value="{!theCon.Phone}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Opportunity Details" columns="2" rendered="{!isOpportunity}" >
+                <apex:inputField value="{!theOpp.Name}"/>
+                <apex:inputField value="{!theOpp.CloseDate}"/>
+                <apex:inputField value="{!theOpp.Amount}"/>
+                <apex:inputField value="{!theOpp.NextStep}"/>
+                <apex:inputField value="{!theOpp.StageName}"/>
+                <apex:inputField value="{!theOpp.Type}"/>
+                <apex:inputField value="{!theOpp.Probability}"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        <apex:pageBlock title="Details" rendered="{!isDetails}">
+            <apex:pageBlockButtons >                   
+                <apex:commandButton value="Save" action="{!save}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>  
+            <apex:pageBlockSection title="Account Details" columns="2">            
+                <apex:outputField value="{!theAcc.name}" /> 
+                <apex:outputField value="{!theAcc.site}"/> 
+                <apex:outputField value="{!theAcc.type}"/> 
+                <apex:outputField value="{!theAcc.accountNumber}"/>              
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Contact Details" columns="2">
+                <apex:outputField value="{!theCon.FirstName}"/>
+                <apex:outputField value="{!theCon.LastName}"/>
+                <apex:outputField value="{!theCon.Email}"/>
+                <apex:outputField value="{!theCon.Phone}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Opportunity Details" columns="2">
+                <apex:outputField value="{!theOpp.Name}"/>
+                <apex:outputField value="{!theOpp.CloseDate}"/>
+                <apex:outputField value="{!theOpp.Amount}"/>
+                <apex:outputField value="{!theOpp.NextStep}"/>
+                <apex:outputField value="{!theOpp.StageName}"/>
+                <apex:outputField value="{!theOpp.Type}"/>
+                <apex:outputField value="{!theOpp.Probability}"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        <apex:pageBlock rendered="{!isSuccess}">
+        	<div><apex:commandButton value="Home" action="{!cancel}"/>
+                <center><h1 style="color:green;">Successsfully Saved..!</h1></center>
+            </div>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

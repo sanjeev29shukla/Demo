@@ -1,0 +1,106 @@
+<apex:page standardController="Case"  >
+    <style>
+       .theButton {
+    background: #d10a11;
+    color: #fff;
+    border: none;
+    padding: 15px 15px;
+    font-size: 14px;
+    font-weight: normal;
+    margin-bottom: 25px;
+    margin-right: 5px;margin-top: 15px;
+}
+#theTimer{margin: 15px;float:left;
+    }
+
+.timer_block textarea{margin-left: 15px;
+    
+    border: 1px solid #ccc;
+    padding: 5px 10px;}
+.timer_block select {
+    margin-left: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+}
+.timer_block{border:1px solid #ccc;}
+.title{background:#d10a11; width:98%; text-align:center;padding:10px 1%;color:#fff;}
+    </style>
+    <div class="timer_block">
+    <div class="title">Timer</div>
+    <div id="theTimer"><time>00:00:00</time></div>
+    <button id="start" onclick="start()" class="theButton">Start</button>
+    <button id="stop" onclick="stop();" disabled="true" class="theButton">Stop</button>
+     <apex:form id="frm">
+        <apex:actionFunction name="SaveTime" action="{!save}" reRender="as" oncomplete="oncomplete1();"/>
+        <apex:inputTextarea value="{!Case.Description}" rows="8" cols="35" required="true" /><br/><br/><br/>
+        <apex:inputField id="csstatus" value="{!Case.Status}" />
+        <apex:inputField id="cssStartTime" value="{!case.Start_Time__c}"/>
+        <apex:commandButton value="Submit" action="{!save}" reRender="frm" />
+    </apex:form>
+    </div>
+    <script>
+    var h1Time = document.getElementById('theTimer'),
+        seconds = 0, minutes = 0, hours = 0,
+        t;
+    
+    function add() {
+        seconds++;
+        if (seconds >= 60) {
+            seconds = 0;
+            minutes++;
+            if (minutes >= 60) {
+                minutes = 0;
+                hours++;
+            }
+        }
+        h1Time.innerHTML = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
+        timer();
+    }
+    
+    function timer(){
+        t = setTimeout(add, 1000);
+    }
+    
+    /* Start button */
+    function start() {
+        var start = document.getElementById("start");
+        document.getElementById("stop").disabled = false;
+         var dt      =   new Date();
+             var dtTm    =   dt.toLocaleString();
+             document.getElementById('{!$Component.frm.cssStartTime}').value =   dtTm;
+            document.getElementById('{!$Component.frm.csstatus}').value = 'In Progress';
+                timer(); 
+                SaveTime();  
+               //location.reload();
+                oncomplete="timer();" 
+                
+       /* if(start.innerHTML == 'Start'){
+            start.innerHTML = 'Pause';
+            //t = setTimeout(add, 1000);
+            timer();
+             var dt      =   new Date();
+             var dtTm    =   dt.toLocaleString();
+             document.getElementById('{!$Component.frm.cssStartTime}').value =   dtTm;
+            document.getElementById('{!$Component.frm.csstatus}').value = 'In Progress';
+            SaveTime();
+        }else{
+            start.innerHTML = 'Start';
+            clearTimeout(t);
+           // SaveTime();
+            
+        }*/
+    }
+       
+    
+    /* Stop button */
+    function stop() {
+        if(confirm("Your login Duration: "+h1Time.innerText)){
+            document.getElementById("start").disabled = true;
+            clearTimeout(t);
+            document.getElementById("stop").disabled = true;
+        }
+    }
+    
+    </script>
+</apex:page>
